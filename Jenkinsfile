@@ -2,21 +2,35 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+
+        stage('Checkout') {
             steps {
-                echo 'Building application'
+                git branch: 'main',
+                url: 'https://github.com/Turki95166/8.2CDevSecOps.git'
             }
         }
 
-        stage('Test') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Running tests'
+                bat 'npm install'
             }
         }
 
-        stage('Deploy') {
+        stage('Run Tests') {
             steps {
-                echo 'Deploying application'
+                bat 'npm test'
+            }
+        }
+
+        stage('Generate Coverage Report') {
+            steps {
+                bat 'npm run coverage'
+            }
+        }
+
+        stage('NPM Audit (Security Scan)') {
+            steps {
+                bat 'npm audit'
             }
         }
     }
